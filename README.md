@@ -1,30 +1,8 @@
-# raspi-gpio-mqtt
+# sysfs-gpio-mqtt
 
-A little app written in Go to watch for changes to GPIO pins on the Raspberry Pi and relay them to an MQTT topic. 
+This is a fork of heathbar/raspi-gpio-mqtt with support for both direction of gpio pins
+and auto-discovery in home assistant.
 
-The app uses the os.select() to receive changes from the kernel rather than polling to keep CPU usage to a minimum. It also debounces the input so that the MQTT topic does not get spammed. 
-
-Dependencies: github.com/brian-armstrong/gpio, github.com/eclipse/paho.mqtt.golang
-
-## Setup
-```bash
-git clone git@github.com:heathbar/raspi-gpio-mqtt.git
-cd raspi-gpio-mqtt
-go get
-go build
-
-# root/sudo is required to access the GPIO pins on the raspberry pi. 
-sudo ./raspi-gpi-mqtt -b tcp://my-mqtt-server.com:1883
-```
-
-### systemd
-```bash
-sudo cp ./raspi-gpio-mqtt.service /etc/systemd/system/
-sudo systemd enable raspi-gpio-mqtt
-sudo systemd start raspi-gpio-mqtt
-```
-
-## TODO
-- mqtt security
-- mqtt QoS
-- configurable debounce timeout
+After launching with `-p 19:binary_sensor:somebutton,13:switch:somelights`
+you will see in homeassistant a switch named `somelights` and a sensor named `somebutton`.
+No additional configuration needed, except enabled autodiscovery in homeassistant.
